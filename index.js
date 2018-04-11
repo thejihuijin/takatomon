@@ -1,8 +1,9 @@
 /* DATA */
-
+var tribeArray = ["abyss","blazing","bright","earth","electric","glacier","mirage"];
 /* Indices */
 var allDigi = new Set(Object.keys(digi));
 var selectedDigi = new Set();
+var filteredDigi = new Set();
 
 /* Digivolution Tree Navigator */
 function next(mon) {
@@ -136,7 +137,22 @@ function intersect(trees) {
 
 
 /* Tree Visualization */
+function filter() {
+  console.log("filter selected");
+  console.log(tribeFilter.mirage);
+  selectedDigi.forEach(function (mon) {
+    console.log(digi[mon].tribe);
+    if (tribeFilter[digi[mon].tribe]) {
+      console.log('Adding mon');
+      filteredDigi.add(mon);
+    } else {
+      console.log('Deleting mon');
+      filteredDigi.delete(mon);
+    }
 
+  });
+
+}
 function update() {
     if (search.value) {
         return;
@@ -152,8 +168,11 @@ function update() {
         linelayer.innerHTML = "";
     }
     else {
+        filter();
         var trees = [];
         selectedDigi.forEach(function (mon) {
+          if (!(filteredDigi.has(mon))) {
+
             var clone = digi[mon].element.cloneNode(true);
             clone.className = "mon";
             addTapListener(clone, function () {
@@ -163,10 +182,23 @@ function update() {
 
             var tree = getTree(mon);
             trees.push(tree);
+          }
         });
         var chosenTree = chosen(trees);
         drawTree(chosenTree);
     }
+}
+
+function clear() {
+  selectedDigi.forEach(function (mon) {
+    deselectDigi(mon);
+    console.log(mon);
+    //digi[mon].element.classList.remove("root");
+    //digi[mon].element.classList.remove("leaf");
+    //digi[mon].element.classList.remove("hidden");
+  });
+  linelayer.innerHTML = "";
+  console.log('Clear pressed');
 }
 
 function drawTree(tree) {
@@ -240,6 +272,13 @@ function drawBranch(branch, p, k) {
 
 var viewOptionSelected;
 var treeOptionSelected;
+
+// Add to array later
+var nullFilterSelected;
+
+var tribeFilter = new Object();
+
+
 
 function selectDigi(mon) {
     selectedDigi.add(mon);
@@ -334,6 +373,9 @@ function initMons() {
 function initOptions() {
     var viewOption = document.getElementById("viewOption");
     var treeOption = document.getElementById("treeOption");
+
+    var clearButton = document.getElementById("clear");
+  
     addTapListener(viewOption, function (e) {
         if (viewOptionSelected) {
             viewOption.classList.remove("selected");
@@ -356,9 +398,105 @@ function initOptions() {
         }
         update();
     });
+    addTapListener(clearButton, function (e) {
+      clear();
+    });
+
+
     viewOption.click();
     treeOption.click();
+
 }
+// ["abyss","blazing","bright","earth","electric","glacier","mirage"];
+function initFilters() {
+    var abyssFilter = document.getElementById("abyssFilter");
+    var blazingFilter = document.getElementById("blazingFilter");
+    var brightFilter = document.getElementById("brightFilter");
+    var earthFilter = document.getElementById("earthFilter");
+    var electricFilter = document.getElementById("electricFilter");
+    var glacierFilter = document.getElementById("glacierFilter");
+    var mirageFilter = document.getElementById("mirageFilter");
+    
+    // Filter options
+    addTapListener(abyssFilter, function (e) {
+      if (tribeFilter.abyss) {
+        abyssFilter.classList.remove("selected");
+        tribeFilter.abyss = 0;
+      }
+      else {
+        abyssFilter.classList.add("selected");
+        tribeFilter.abyss = 1;
+      }
+      update();
+    });
+
+    addTapListener(blazingFilter, function (e) {
+      if (tribeFilter.blazing) {
+        blazingFilter.classList.remove("selected");
+        tribeFilter.blazing = 0;
+      }
+      else {
+        blazingFilter.classList.add("selected");
+        tribeFilter.blazing = 1;
+      }
+      update();
+    });
+
+    addTapListener(brightFilter, function (e) {
+      if (tribeFilter.bright) {
+        brightFilter.classList.remove("selected");
+        tribeFilter.bright = 0;
+      }
+      else {
+        brightFilter.classList.add("selected");
+        tribeFilter.bright = 1;
+      }
+      update();
+    });
+
+    addTapListener(electricFilter, function (e) {
+      if (tribeFilter.electric) {
+        electricFilter.classList.remove("selected");
+        tribeFilter.electric = 0;
+      }
+      else {
+        electricFilter.classList.add("selected");
+        tribeFilter.electric = 1;
+      }
+      update();
+    });
+
+    addTapListener(glacierFilter, function (e) {
+      if (tribeFilter.glacier) {
+        glacierFilter.classList.remove("selected");
+        tribeFilter.glacier = 0;
+      }
+      else {
+        glacierFilter.classList.add("selected");
+        tribeFilter.glacier = 1;
+      }
+      update();
+    });
+
+    addTapListener(mirageFilter, function (e) {
+      if (tribeFilter.mirage) {
+        mirageFilter.classList.remove("selected");
+        tribeFilter.mirage = 0;
+      }
+      else {
+        mirageFilter.classList.add("selected");
+        tribeFilter.mirage = 1;
+      }
+      update();
+    });
+
+    // Initialize filter options
+    tribeArray.forEach(function (tribe) {
+      tribeFilter[tribe] = 0;
+    });
+}
+
+
 
 function initSearch() {
     var search = document.getElementById("search");
@@ -411,6 +549,7 @@ function init() {
     initOptions();
     initSearch();
     initGrowlmon();
+    initFilters();
 }
 
 init();
