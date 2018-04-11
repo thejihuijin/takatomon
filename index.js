@@ -139,14 +139,10 @@ function intersect(trees) {
 /* Tree Visualization */
 function filter() {
   console.log("filter selected");
-  console.log(tribeFilter.mirage);
   selectedDigi.forEach(function (mon) {
-    console.log(digi[mon].tribe);
     if (tribeFilter[digi[mon].tribe]) {
-      console.log('Adding mon');
       filteredDigi.add(mon);
     } else {
-      console.log('Deleting mon');
       filteredDigi.delete(mon);
     }
 
@@ -190,13 +186,23 @@ function update() {
 }
 
 function clear() {
+  // Remove all filters
+  tribeArray.forEach(function (tribe) {
+      if (tribeFilter[tribe]) {
+        // filter is on. turn it off
+        filterElement = document.getElementById(tribe+"Filter");
+        filterElement.click();
+      }
+  });
+
+
   selectedDigi.forEach(function (mon) {
     deselectDigi(mon);
-    console.log(mon);
     //digi[mon].element.classList.remove("root");
     //digi[mon].element.classList.remove("leaf");
     //digi[mon].element.classList.remove("hidden");
   });
+  
   linelayer.innerHTML = "";
   console.log('Clear pressed');
 }
