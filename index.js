@@ -460,6 +460,17 @@ function initFilters() {
       update();
     });
 
+    addTapListener(earthFilter, function (e) {
+      if (tribeFilter.earth) {
+        earthFilter.classList.remove("selected");
+        tribeFilter.earth = 0;
+      }
+      else {
+        earthFilter.classList.add("selected");
+        tribeFilter.earth = 1;
+      }
+      update();
+    });
     addTapListener(electricFilter, function (e) {
       if (tribeFilter.electric) {
         electricFilter.classList.remove("selected");
